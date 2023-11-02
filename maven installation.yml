@@ -1,0 +1,48 @@
+
+
+-------------------------------Installing Maven on RedHat server----------------------------
+    
+	$ sudo yum install wget unzip wget -y
+	
+	
+ 1--> Install java 8 or 1.8 for maven build tool
+ 
+      $ sudo yum install java-8-openjdk-devel -y
+	  
+2--> download apache maven zip file 
+ 
+       $ cd /opt
+
+      $ sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.5/binaries/apache-maven-3.9.5-bin.zip
+	  
+	  $ sudo unzip apache-maven-3.9.5-bin.zip
+	  
+3--> set environment variable
+
+     $ vim ~/.bash_profile
+	   
+	   export maven=/opt/apache-maven-3.9.5
+	   export PATH=$maven/bin:$PATH
+	   
+	 ## reloading .bash_profile file
+	   
+	   $ source ~/.bash_profile
+	   
+4--> maven default local Repository
+
+     ~/.m2/repository
+	 
+5--> Changing default .m2 local repo to custom repo
+
+       $ sudo vim settings.xml
+	   
+	     <localRepository>KeepCustomRepoPath</localRepository>
+		 
+		 
+6--> if you want to skip unit test 
+
+    mvn clean package -DskipTests
+	
+	mvn clean package -Dmaven.test.skip=true
+	  
+	  

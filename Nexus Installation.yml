@@ -1,0 +1,80 @@
+
+
+-----------------------------Installing Nexus Artifactory on RedHat Server---------------------------
+
+          4 GB RAM server required
+		  
+		  $ sudo yum install wget tar unzip vim -y
+		  
+1--> installing java
+    
+	$ sudo yum install java-11-openjdk-devel -y
+	
+2--> download Nexus tar file
+
+   $ cd /opt
+   
+   $ sudo wget https://download.sonatype.com/nexus/3/nexus-3.61.0-02-unix.tar.gz
+   
+   $ sudo tar -zxvf nexus-3.61.0-02-unix.tar.gz
+   
+   ## Rename nexus-3.61.0 to nexus
+   
+    $ sudo mv /opt/nexus-3.61.0 /opt/nexus
+	
+3--> create user for nexus server
+ 
+    $ sudo useradd nexus
+	
+	$ visudo 
+	
+	 nexus      ALL=(ALL)	NOPASSWD:ALL
+	 
+4--> changing ownership and permission for nexus and sonatype-work directory
+
+    $ chown -R nexus:nexus /opt/nexus
+	
+	$ chown -R nexus:nexus /opt/sonatype-work
+	
+	$ chmod -R 775 /opt/nexus
+	
+	$ chmod -R 775 /opt/sonatype-work
+	
+    $ vim /opt/nexus/bin/nexus.rc
+	
+	  -> run_as_user="nexus"  ---->uncomment this line and put nexus user which you have created
+	  
+5--> create a service for nexus software
+
+    $ sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+	
+6--> for starting nexus switch as a nexus user
+
+    $ sudo su - nexus
+	
+	$ sudo service nexus enable
+	
+	$ sudo service nexus start
+
+
+7--> Accessing nexus server
+
+    http://publicIP:8081/
+
+    default username: admin
+
+     password $ sudo cat /opt/sonatype-work/nexus-3/admin.password
+
+8--> disable nexus Dashboard
+
+    ->server Administration and management->Anonymous Access->desable->save
+
+9--> Changing default port number and context path
+
+    $ cd /opt/nexus/etc	
+	
+	$ vim nexus-default.properties
+	
+	  ## application-port=8081
+	  ## nexus-context-path=/
+	

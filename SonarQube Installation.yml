@@ -1,0 +1,80 @@
+
+
+-----------------SonarQuebe Installation on RedHat Server------------------------
+
+1--> sonarqube server
+   
+    4 GB RAM Required
+	
+    $ sudo yum update -y
+	$ sudo yum install wget unzip vim -y
+	
+2--> installing OpenJdk 
+
+    $ sudo yum install java-11-openjdk-devel -y
+	
+3--> goto opt directory
+
+    $ cd /opt
+	
+4--> download SonarQuebe zip file
+
+    $ sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.8.0.63668.zip
+	
+5--> unzip SonarQuebe zip file
+
+    $ sudo unzip sonarqube-9.8.0.63668.zip
+	
+6--> create a user for SonarQuebe
+
+    $ sudo useradd sonar
+	
+	$ visudo
+	
+	sonar     ALL=(ALL)    NOPASSWD:ALL
+	
+7--> Change ownership, group and change pemission to sonarqube
+
+    $ sudo chown -R sonar:sonar /opt/sonarqube-9.8.0.63668
+	
+	$ chmod -R 775 /opt/sonarqube-9.8.0.63668
+	
+8--> switch root user to SonarQuebe user 
+
+     $ sudo su - sonar
+	 
+9--> Start SonarQuebe server
+ 
+    $ cd /opt/sonarqube-9.8.0.63668/bin/linux-x86-64
+	
+	$ sh sonar.sh start  --> ##Start sonarquebe server always trough the sonarqube user
+	
+10--> Brows sonarqube server 
+
+      http://serverPublicIP:9000
+	  
+	  ## default Credentials  username=admin    password=admin
+	  
+11--> disable dashboard tabs
+
+     ->Administration->security->force user authentication->unable->save
+	 
+12--> Changing Password
+
+    ->user account log->my account->security->change password->save
+	
+13--> Executing sonarqube report for java project
+
+     -- configure sonarqube url, username and password in pom.xml
+	 
+	  $ vim pom.xml
+	  
+	    <properties>
+		<sonar.host.url>http://IpAddress:9000</sonar.host.url>
+		<sonar.login>SonarQuebe_username</sonar.login>
+		<sonar.password>SonarQuebe_password</sonar.password>
+		</properties>
+		
+	##command for running sonarqube report
+	    
+		   mvn sonar:sonar
